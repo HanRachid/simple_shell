@@ -6,7 +6,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-#define BUFFER_SIZE 1024
 #define PROMPT "simple_shell$ "
 
 /* Declare environ */
@@ -26,6 +25,7 @@ int main(void)
     {
         /* Display the prompt */
         printf(PROMPT);
+        fflush(stdout);  /* Ensure prompt is displayed immediately */
         
         /* Read the command */
         nread = getline(&buffer, &bufsize, stdin);
