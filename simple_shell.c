@@ -20,6 +20,7 @@ int main(void)
     char *args[2]; /* We only need space for one command and a NULL terminator. */
     pid_t pid;
     int status;
+    char **env; /* Declare env outside the loop */
 
     while (1)
     {
@@ -48,6 +49,16 @@ int main(void)
         /* Check if the user entered nothing (just pressed Enter) */
         if (buffer[0] == '\0')
             continue;
+
+        /* Handle the 'env' command */
+        if (strcmp(buffer, "env") == 0)
+        {
+            for (env = environ; *env != 0; env++)
+            {
+                printf("%s\n", *env);    
+            }
+            continue;
+        }
 
         /* Prepare arguments for execve */
         args[0] = buffer;
