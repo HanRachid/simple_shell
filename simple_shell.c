@@ -8,7 +8,6 @@
 
 #define PROMPT "simple_shell$ "
 
-/* Declare environ */
 extern char **environ;
 
 int main(void)
@@ -16,17 +15,16 @@ int main(void)
     char *buffer = NULL;
     size_t bufsize = 0;
     ssize_t nread;
-    char *args[2]; /* We only need space for one command and a NULL terminator. */
+    char *args[2];
     pid_t pid;
     int status;
-    char **env; /* Declare env outside the loop */
 
     while (1)
     {
         /* Display the prompt */
         printf(PROMPT);
-        fflush(stdout);  /* Ensure prompt is displayed immediately */
-        
+        fflush(stdout);
+
         /* Read the command */
         nread = getline(&buffer, &bufsize, stdin);
         if (nread == -1)
@@ -46,16 +44,17 @@ int main(void)
         /* Remove newline character from the input */
         buffer[strcspn(buffer, "\n")] = 0;
 
-        /* Check if the user entered nothing (just pressed Enter) */
+        /* Check if the user entered nothing */
         if (buffer[0] == '\0')
             continue;
 
         /* Handle the 'env' command */
         if (strcmp(buffer, "env") == 0)
         {
-            for (env = environ; *env != 0; env++)
+            char **env = environ;
+            while (*env)
             {
-                printf("%s\n", *env);    
+                printf("%s\n", *env++);
             }
             continue;
         }
