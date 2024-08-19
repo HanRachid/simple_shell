@@ -4,49 +4,42 @@ int main(void)
 {
     char *buffer = NULL;
     size_t bufsize = 0;
-    ssize_t line_size;
     char *argv[MAX_ARGS];
-    int status = 0;
-    
+
     while (1)
     {
-        /* Display prompt in interactive mode */
-        if (isatty(STDIN_FILENO))
-            write(1, "($) ", 4);
-
-        /* Get the command line from the user */
-        line_size = getline(&buffer, &bufsize, stdin);
-        if (line_size == -1)
+        printf("shell$ "); // Display prompt
+        if (getline(&buffer, &bufsize, stdin) == -1)
         {
+            perror("getline error");
             free(buffer);
             exit(EXIT_FAILURE);
         }
 
-        /* Remove newline character from the input */
-        if (buffer[line_size - 1] == '\n')
-            buffer[line_size - 1] = '\0';
+        // Parse input into argv array
+        int i = 0;
+        char *token = strtok(buffer, " \n");
+        while (token != NULL && i < MAX_ARGS - 1)
+        {
+            argv[i++] = token;
+            token = strtok(NULL, " \n");
+        }
+        argv[i] = NULL;
 
-        /* Split the command line into arguments */
-        cutCommandLine(buffer, argv);
-
-        /* If the command is empty, continue to the next loop */
-        if (argv[0] == NULL)
+        if (argv[0] == NULL) // Check if no command was entered
             continue;
 
-        /* Check for built-in commands (e.g., "exit") */
-        if (_strcmp(argv[0], "exit") == 0)
+        if (_strcmp(argv[0], "exit") == 0) // Exit command
         {
             free(buffer);
-            exit(EXIT_SUCCESS);
+            exit(0);
         }
 
-        /* Execute the command */
-        status = exeCommandLine(argv);
-        if (status == -1)
+        if (exeCommandLine(argv) == -1)
         {
-            perror("Error");
+            printf("Command execution failed\n");
         }
     }
     free(buffer);
-    return (0);
+    return 0;
 }

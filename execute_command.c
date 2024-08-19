@@ -1,25 +1,28 @@
 #include "shell.h"
 
+int exeCommandLine(char *argv[MAX_ARGS])
+{
+    int fflag;  
 
-	int fflag = 0;
-	fflag = fork();
-	if (fflag == -1)
-	{
-		printf("fealuire");
-		return (-1);
-	}
-	else if (fflag == 0)
-	{
-		if (execve(argv[0], (char **)argv, NULL) == -1)
-		{
-			printf("No such file or directory\n");
-			return (-1);
-		}
-	}
-	else
-	{
-		wait(NULL);
-		return (0);
-	}
-	return (2);
+    fflag = fork();  
 
+    if (fflag == -1)
+    {
+        perror("Fork failed");
+        return (-1);
+    }
+    else if (fflag == 0)
+    {
+        if (execve(argv[0], argv, NULL) == -1)
+        {
+            perror("Command execution failed");
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        wait(NULL);
+        return (0);
+    }
+    return (2);   
+}
