@@ -1,6 +1,6 @@
 #include "shell.h"
 
-{
+
 	int fflag = 0;
 	fflag = fork();
 	if (fflag == -1)
@@ -22,4 +22,4 @@
 		return (0);
 	}
 	return (2);
-}
+
