@@ -1,30 +1,46 @@
-#include "main.h"
+#include <stdlib.h>  /* For malloc, NULL */
+#include <string.h>  /* For strtok, strlen, strcpy */
 
 /**
- * strtokarray - converts string into array of strings delimited by ":"
- * @str: str to cut with delim ":"
- * @delim : delimiter
- * Return: void;
+ * strtokarray - Converts a string into an array of strings delimited by the given delimiter.
+ * @str: The string to tokenize.
+ * @delim: The delimiter used for tokenization.
+ * 
+ * Return: An array of strings (tokens) or NULL if an error occurs.
  */
-
-char **strtokarray(char *str, char *delim)
+char **strtokarray(char *str, const char *delim)
 {
-	char **arr = malloc(100 * sizeof(char *));
-	char *token;
-	int i = 0;
+    char **arr;
+    char *token;
+    int i = 0;
 
-	if (str == NULL)
-		return (NULL);
-	token = strtok(str, delim);
+    if (str == NULL || delim == NULL)
+        return (NULL);
 
-	while (token != NULL)
-	{
-		arr[i] = malloc((strlen(token) + 1) * sizeof(char));
-		strcpy(arr[i], token);
-		token = strtok(NULL, delim);
-		i++;
-	}
+    /* Allocate memory for the array of string pointers */
+    arr = malloc(100 * sizeof(char *));
+    if (arr == NULL)
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
 
-	arr[i] = NULL;
-	return (arr);
-}
+		    /* Tokenize the input string */
+    token = strtok(str, delim);
+    while (token != NULL)
+    {
+        arr[i] = malloc((strlen(token) + 1) * sizeof(char));
+        if (arr[i] == NULL)
+        {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
+        strcpy(arr[i], token);
+        token = strtok(NULL, delim);
+        i++;
+    }
+
+    arr[i] = NULL; /* Null-terminate the array */
+
+	    return (arr);
+				}
