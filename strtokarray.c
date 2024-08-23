@@ -1,5 +1,6 @@
-#include <stdlib.h>  /* For malloc, NULL */
-#include <string.h>  /* For strtok, strlen, strcpy */
+#include <stdlib.h>   /* For malloc, NULL */
+#include <string.h>   /* For strtok, strlen, strcpy */
+#include <stdio.h>    /* For perror */
 
 /**
  * strtokarray - Converts a string into an array of strings delimited by the given delimiter.
@@ -25,7 +26,7 @@ char **strtokarray(char *str, const char *delim)
         exit(EXIT_FAILURE);
     }
 
-		    /* Tokenize the input string */
+    /* Tokenize the input string */
     token = strtok(str, delim);
     while (token != NULL)
     {
@@ -42,5 +43,5 @@ char **strtokarray(char *str, const char *delim)
 
     arr[i] = NULL; /* Null-terminate the array */
 
-	    return (arr);
-				}
+    return (arr);
+}
