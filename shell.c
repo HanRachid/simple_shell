@@ -39,6 +39,7 @@ int main(void)
     {
         /* Display prompt */
         printf("#cisfun$ ");
+        fflush(stdout); /* Ensure prompt is printed immediately */
 
         /* Read input from the user */
         nread = getline(&line, &len, stdin);
