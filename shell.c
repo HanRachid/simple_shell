@@ -45,7 +45,8 @@ int main(void)
         if (nread == -1) /* Handle EOF (Ctrl+D) */
         {
             printf("\n");
-            break;
+            free(line);
+            exit(0);
         }
 
         /* Remove newline character from the input */
@@ -62,24 +63,24 @@ int main(void)
             /* Execute command */
             if (execve(args[0], args, environ) == -1)
             {
-                perror("./shell");
+                perror("./simple_shell");
+                exit(EXIT_FAILURE);
             }
-            exit(EXIT_FAILURE);
         }
         else if (pid > 0) /* Parent process */
         {
             /* Wait for the child process to finish */
             wait(&status);
 
-            /* After the command executes, print the environment variables */
+            /* Print environment variables */
             print_environment();
         }
         else
         {
             perror("fork");
+            exit(EXIT_FAILURE);
         }
     }
 
-    free(line);
-    return (0);
+    return 0;
 }
